@@ -1,0 +1,40 @@
+body {
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+}
+
+#ids, #link {
+  display: flex;
+}
+
+#link {
+  align-items: center;
+  justify-content: center;
+}
+
+#ids > * {
+  padding: 5px;
+}
+
+#link > * {
+  padding: 5px;
+}
+
+table, td, th {
+  border: 1px solid #aaa;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  height: 30px;
+}
+
+td {
+  text-align: center;
+  padding: 5px;
+}
