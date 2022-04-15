@@ -10,16 +10,19 @@ import pathlib
 from dotenv import load_dotenv
 
 fileLocation = pathlib.Path(__file__).parent.resolve()
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///playlist.db"
 db = SQLAlchemy(app)
+
 class PlaylistTable(db.Model):
   id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(200), default=0)
   link = db.Column(db.String(80), default=0, unique=True)
   date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
   def __repr__(self):
-    return "<Task %r" % self.id
+    return "<Playlist %r" % self.id
 
 @app.route("/", methods=["POST", "GET"])
 def index():
@@ -45,18 +48,19 @@ def index():
       playlist_link = request.form["pl"]
     else:
       return "Please provide a Spotify link"
-    new_link = PlaylistTable(link = playlist_link)
 
     try:
       playlist_df = playlist_to_dataframe(sp, playlist_link)
       song_list = playlist_to_dict(sp, playlist_link)
+      global link_list
       link_list = search_youtube(song_list)
       song_df = get_Info(sp, playlist_link, link_list, playlist_df)
       playlistName = song_df['name'].iloc[0]
       output_csv = playlistName + ".csv"
       link_list.to_csv(output_csv, index=False)
       print("File saved to: {} with name {}".format(str(fileLocation),output_csv))
-      db.session.add(new_link)
+      new_playlist = PlaylistTable(name = playlistName, link = playlist_link)
+      db.session.add(new_playlist)
       db.session.commit()
       return redirect(url_for("playlist", play=playlistName))
     except:
@@ -67,7 +71,8 @@ def index():
 
 @app.route("/<play>")
 def playlist(play):
-  return f"<h1>{play}</h1"
+  return render_template("playlist.html", play = play, column_names=link_list.columns.values, row_data=list(link_list.values.tolist()),
+                           link_column="Playlist Name", zip=zip)
 
 if __name__ == "__main__":
   app.run(debug=True)

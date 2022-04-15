@@ -1,7 +1,7 @@
 window.addEventListener('load', init);
 
 function init() {
-  const becomeURL = document.querySelectorAll('tbody > tr > td:first-child');
+  const becomeURL = document.querySelectorAll('ssstbody > tr > td:first-child + td');
   console.log(becomeURL);
   for (let i = 0; i < becomeURL.length; i++) {
     let link = document.createElement('a');

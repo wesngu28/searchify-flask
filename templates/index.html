@@ -22,7 +22,7 @@ Home Page
 </div>
 <div class="tabular">
   <h1>Playlists</h1>
-  <table>
+  <table id="#playlisthistory">
     <tr>
       <th>Name</th>
       <th>Link</th>
@@ -30,7 +30,8 @@ Home Page
     </tr>
     {% for playlist in playlists%}
       <tr>
-        <td>{{ playlist.link }}</td>
+        <td>{{ playlist.name }}</td>
+        <td><a href={{ playlist.link }}>{{ playlist.name }}</a></td>
         <td>{{ playlist.date_added.date() }}</td>
       </tr>
     {% endfor %}
