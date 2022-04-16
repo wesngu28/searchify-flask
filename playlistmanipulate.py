@@ -41,6 +41,7 @@ def get_Info(sp, URL, df, copy):
     max_item = item_counts.max()
 
     quickInfo = pd.DataFrame()
+    quickInfo['img'] = [cover_url]
     quickInfo['name'] = [playlist_name]
     quickInfo['size'] = [playlist_size]
     quickInfo['frequent'] = [mode]

@@ -16,15 +16,7 @@ Home Page
     {% for row in row_data %}
     <tr>
         {% for col, row_ in zip(column_names, row) %}
-        {% if col == link_column %}
-        <td>
-            <button type="submit" value={{ row_ }} name="person_id" form="patient_form" class="patient_button">
-                {{ row_ }}
-            </button>
-        </td>
-        {% else %}
         <td>{{row_}}</td>
-        {% endif %}
         {% endfor %}
     </tr>
     {% endfor %}
