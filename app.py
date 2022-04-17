@@ -1,20 +1,24 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
+
 from datetime import datetime
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from playlistmanipulate import playlist_to_dataframe, playlist_to_dict, get_Info
-from search import search_youtube
-import os
+from search import search_youtube, getAPIKeys
 import pandas as pd
 import pathlib
-from dotenv import load_dotenv
 
 fileLocation = pathlib.Path(__file__).parent.resolve()
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///playlist.db"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 db = SQLAlchemy(app)
+
 
 class PlaylistTable(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -25,38 +29,35 @@ class PlaylistTable(db.Model):
   def __repr__(self):
     return "<Playlist %r" % self.id
 
+
 @app.route("/", methods=["POST", "GET"])
 def index():
-  load_dotenv()
-  env_cid = os.getenv("CID")
-  env_sid = os.getenv("SID")
   if request.method == "POST":
-    if request.form["cid"]:
-      user_cid = request.form["cid"]
-    elif env_cid != "YOUR CID HERE" or env_cid != "":
-      user_cid = env_cid
+    apiKeys = getAPIKeys()
+    print(apiKeys)
+    if len(apiKeys) == 2:
+      user_cid = apiKeys[0]
+      user_sid = apiKeys[1]
     else:
-      return "Please provide a client ID"
-    if request.form["cid"]:
-      user_sid = request.form["sid"]
-    elif env_sid != "YOUR SID HERE" or env_sid != "":
-      user_sid = env_sid
-    else:
-      return "Please provide a secret ID"
+      playlists = PlaylistTable.query.order_by(PlaylistTable.date_added.desc()).limit(10)
+      return render_template("index.html", error_msg = 'Provide your IDs in the environment file', playlists=playlists)
     client_credentials_manager = SpotifyClientCredentials(client_id=user_cid,client_secret=user_sid)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     if request.form["pl"]:
       playlist_link = request.form["pl"]
     else:
-      return "Please provide a Spotify link"
+      playlists = PlaylistTable.query.order_by(PlaylistTable.date_added.desc()).limit(10)
+      return render_template("index.html", error_msg = 'Provide a Playlist Link', playlists=playlists)
 
     try:
+      session.clear()
       playlist_df = playlist_to_dataframe(sp, playlist_link)
       song_list = playlist_to_dict(sp, playlist_link)
       link_df = search_youtube(song_list)
       link_dict = link_df.to_dict('list')
       session['links'] = link_dict
       song_df = get_Info(sp, playlist_link, link_df, playlist_df)
+      print(song_df)
       song_dict = song_df.to_dict('list')
       session['songs'] = song_dict
       output_csv = song_df['name'].iloc[0] + ".csv"
@@ -74,7 +75,7 @@ def index():
 
 @app.route("/<play>")
 def playlist(play):
-  if session['links'] in session:
+  if session['links']:
     link_dict = session['links']
     link_df = pd.DataFrame(link_dict)
     song_dict = session['songs']

@@ -7,17 +7,12 @@ Home Page
 {% block content %}
 <div>
   <form action ="#" method="POST">
-    <div id="ids">
-      <p>Please Provide Client ID:</p>
-      <p><input type="text" name="cid" id="cid"/></p>
-      <p>Please Provide Secret ID:</p>
-      <p><input type="text" name="sid" id="sid"/></p>
-    </div>
     <div id="link">
       <p>Playlist Link:</p>
       <p><input type="text" name="pl" id="pl"/></p>
       <p><input type="submit" name="submit"/></p>
     </div>
+    <p>{{ error_msg }}</p>
   </form>
 </div>
 <div class="tabular">
