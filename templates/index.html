@@ -6,7 +6,7 @@ Home Page
 
 {% block content %}
 <div>
-  <form action ="#" method="POST">
+  <form action ="/" method="POST">
     <div id="link">
       <p>Playlist Link:</p>
       <p><input type="text" name="pl" id="pl"/></p>
@@ -14,22 +14,5 @@ Home Page
     </div>
     <p>{{ error_msg }}</p>
   </form>
-</div>
-<div class="tabular">
-  <h1>Playlists</h1>
-  <table id="#playlisthistory">
-    <tr>
-      <th>Name</th>
-      <th>Link</th>
-      <th>Added</th>
-    </tr>
-    {% for playlist in playlists%}
-      <tr>
-        <td>{{ playlist.name }}</td>
-        <td><a href={{ playlist.link }}>{{ playlist.name }}</a></td>
-        <td>{{ playlist.date_added.date() }}</td>
-      </tr>
-    {% endfor %}
-  </table>
 </div>
 {% endblock %}

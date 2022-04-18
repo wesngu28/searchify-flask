@@ -5,9 +5,39 @@ Home Page
 {% endblock %}
 
 {% block content %}
-<div>
-  <p>{{play}}</p>
-  <table>
+<div id="forms">
+    <form action ="/" method="POST">
+      <div id="link">
+        <p>Playlist Link:</p>
+        <p><input type="text" name="pl" id="pl"/></p>
+        <p><input type="submit" name="submit"/></p>
+      </div>
+      <p>{{ error_msg }}</p>
+    </form>
+</div>
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src={{song_info['img'].iloc[0]}} alt="" width="50%" height="50%">
+    <h1 class="display-5 fw-bold">{{play}}</h1>
+    <div class="col-lg-6 mx-auto">
+        <p>{{play}} was created: {{song_info['created'].iloc[0]}}</p>
+        <p>Size: {{song_info['size'].iloc[0]}}</p>
+        <p>Most frequent artist is {{song_info['frequent'].iloc[0]}}, appearing {{song_info['frequent_count'].iloc[0]}} times</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Primary button</button>
+        </div>
+    </div>
+</div>
+<div id="playlist_info">
+  <img id="playlist_img" src={{song_info['img'].iloc[0]}}>
+  <div id="playlist_info_text">
+    <p id="playlist_name">{{play}}</p>
+    <p>Created: {{song_info['created'].iloc[0]}}</p>
+    <p>Size: {{song_info['size'].iloc[0]}}</p>
+    <p>Most frequent artist is {{song_info['frequent'].iloc[0]}}, appearing {{song_info['frequent_count'].iloc[0]}} times</p>
+  </div>
+</div>
+<div id="tables">
+  <table id="pl_ytlinks">
     <tr>
         {% for col in column_names %}
         <th>{{col}}</th>
@@ -20,7 +50,6 @@ Home Page
         {% endfor %}
     </tr>
     {% endfor %}
-
-</table>
+    </table>
 </div>
 {% endblock %}

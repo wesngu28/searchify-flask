@@ -1,19 +1,5 @@
 import pandas as pd
 from youtubesearchpython import VideosSearch
-from dotenv import load_dotenv
-import os
-
-def getAPIKeys():
-    load_dotenv()
-    env_cid = os.getenv("CID")
-    env_sid = os.getenv("SID")
-    ids = [];
-    if env_cid:
-      ids.append(env_cid)
-    if env_sid:
-      ids.append(env_sid)
-    print(ids)
-    return ids
 
 def search_youtube(song_dict):
     link_list = []
