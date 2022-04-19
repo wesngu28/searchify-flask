@@ -2,6 +2,7 @@ window.addEventListener('load', init);
 
 function init() {
   findLinks();
+  findDownloadButton();
 }
 
 function findLinks() {
@@ -15,4 +16,13 @@ function findLinks() {
       linkSearch[i].appendChild(link);
     }
   }
+}
+
+function findDownloadButton() {
+  const downloadButton = document.querySelector('#dl');
+  downloadButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    fetch('/download-csv');
+    return false;
+  })
 }

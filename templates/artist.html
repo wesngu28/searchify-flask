@@ -6,7 +6,7 @@ Home Page
 
 {% block content %}
 <div id="pl-home" class="mt-2 mb-4 text-center">
-    <img class="d-block mx-auto mb-4" src={{song_info['img'].iloc[0]}} alt="" width="300vh" height="300vh">
+    <img class="d-block mx-auto mb-4" src={{artist_df['img'].iloc[0]}} alt="" width="300vh" height="300vh">
     <h1 class="display-5 fw-bold">{{play}}</h1>
     <div class="col-lg-6 mx-auto">
         <p>{{description}}</p>
@@ -17,6 +17,7 @@ Home Page
         </div>
     </div>
 </div>
+<p>If you like this artist, you might also like these songs!</p>
 <div id="tables">
   <table class="table" id="pl_ytlinks">
     <tr>

@@ -20,7 +20,7 @@ def playlist_to_dataframe(sp, URL):
     return playlist_tracks_df
 
 def playlist_to_dict(sp, df):
-
+    print(df)
     tracks = df['items']
     while df['next']:
         df = sp.next(df)
@@ -52,6 +52,10 @@ def get_Info(sp, URL, df, df2):
     mode = df['Artist'].value_counts().idxmax()
     item_counts = df['Artist'].value_counts()
     max_item = item_counts.max()
+    if(max_item == 1):
+        max_item = 'once'
+    else:
+        max_item = f"{max_item} times"
 
     quickInfo = pd.DataFrame()
     quickInfo['img'] = [cover_url]

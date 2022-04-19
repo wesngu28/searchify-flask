@@ -15,105 +15,18 @@ body{
 
 #link {
   width: 100%;
+  margin-top: 1em;
 }
 
-#pl {
+#inp {
   height:3vh;
   width: 25vw;
-}
-
-#center {
-  text-align: center;
 }
 
 nav {
   justify-content: space-between;
   width: 100%;
 }
-
-#homesHome {
-  justify-content: center;
-}
-
-header {
-  position: fixed;
-}
-
-header, footer {
-  width: 100%;
-  left: 0;
-  height: 7vh;
-  background-color: #C0C0C0;
-}
-
-#inputbar {
-  align-items: center;
-}
-
-header {
-  align-items: center;
-  top: 0;
-}
-
-#dummy {
-  height: 7vh;
-}
-
-#playlist_info {
-  align-items: center;
-  margin-bottom: 2vh;
-  width: 50%;
-}
-
-#playlist_info {
-  background-color: grey;
-  justify-content: center;
-}
-
-#playlist_info_text {
-  margin: auto;
-  font-size: 1.2em;
-}
-
-#playlist_img {
-  height: 50%;
-  width: 50%;
-  margin-right: auto;
-}
-
-#playlist_name {
-  margin-right: auto;
-  font-size:2vw;
-}
-
-#link {
-  align-items: center;
-  justify-content: center;
-}
-
-#tables {
-  width: 50%;
-}
-
-table, td, th {
-  border: 1px solid #aaa;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  width:10vw
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-
 .hidden {
   display: none;
 }
