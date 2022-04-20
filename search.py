@@ -11,9 +11,8 @@ def search_youtube(song_dict):
         link = result["result"][0]["link"]
         link_list.append(link)
         pctg = idx/len(song_dict)
-        print(pctg)
 
-    df = pd.DataFrame(list(song_dict.items()),columns = ['Song Name','Artist'])
+    df = pd.DataFrame(list(song_dict.items()),columns = ['Song Name','Artists'])
     df['Song Link'] = link_list
     return df
 

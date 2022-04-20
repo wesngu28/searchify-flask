@@ -1,33 +1,35 @@
+import time
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import os
 import pandas as pd
 
-def artist_info(sp, url):
-    df = sp.artist(url)
-    genres = df['genres']
-    if (len(genres) > 1):
-        genres.insert(len(genres)-1, 'and')
-        genre_string = ''
-        for genre in genres:
-            genre_string = genre_string + genre + ', '
-        print(genre_string)
-        genre_string = genre_string[:-2]
-        genre_string = genre_string.replace('and,', 'and')
-
+def track_info(sp, url):
+    df = sp.track(url)
+    artists = ''
+    for information in df['artists']:
+      artists = artists + information['name'] + ', '
+    artists = artists[:-2]
     name = df['name']
-    images = df['images'][0]['url']
-    artist = {
-        "name" : name,
-        "genres" : genres,
-        "genre_list" : genre_string,
-        "img" : images
+    track = {
+        "name" : df['name'],
+        "artist" : artists,
+        "duration" : readable_time(df['duration_ms']),
+        "album" : df['album']['name'],
+        "release" : df['album']['release_date'],
+        "img" : df['album']['images'][0]['url']
     }
-    return artist
+    return track
 
-def artist_recommendations(sp, url):
+def readable_time(duration):
+    minutes = (duration / (60*1000)) % 60
+    minutes = int(minutes)
+    sec = (duration / 1000) % 60
+    sec = int(sec)
+    return f"{minutes} minutes and {sec} seconds"
+
+def track_recommendations(sp, url):
     url = [url]
-    df = sp.recommendations(seed_artists=url, limit=2)
+    df = sp.recommendations(seed_tracks=url, limit=2)
     df = df['tracks']
     recommended_track = []
     recommended_artists = []

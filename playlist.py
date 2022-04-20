@@ -20,23 +20,32 @@ def playlist_to_dataframe(sp, URL):
     return playlist_tracks_df
 
 def playlist_to_dict(sp, df):
-    print(df)
     tracks = df['items']
     while df['next']:
         df = sp.next(df)
         tracks.extend(df['items'])
 
-    playlist_tracks_artist = []
     playlist_tracks_titles = []
     for track in tracks:
         if(track['track']['id']!=None):
             playlist_tracks_titles.append(track['track']['name'])
-            playlist_tracks_artist.append(track['track']['artists'][0]['name'])
 
+    playlist_tracks_artist = []
+    for artist in tracks:
+        if (len(artist['track']['artists']) > 1):
+            artist_counter = 0
+            artist_list = ''
+            while (len(artist['track']['artists']) > artist_counter):
+                artist_list = artist_list + artist['track']['artists'][artist_counter]['name'] + ', '
+                artist_counter = artist_counter + 1
+            artist_list = artist_list[:-2]
+            playlist_tracks_artist.append(artist_list)
+        else:
+            playlist_tracks_artist.append(artist['track']['artists'][0]['name'])
     list = dict(zip(playlist_tracks_titles, playlist_tracks_artist))
     return list
 
-def get_Info(sp, URL, df, df2):
+def get_Info(sp, URL, df):
 
     cover_url = sp.playlist_cover_image(URL)
     cover_url = cover_url[0]['url']
@@ -44,25 +53,32 @@ def get_Info(sp, URL, df, df2):
     playlist_name = sp.playlist(URL, fields="name")
     playlist_name = playlist_name['name']
 
-    playlist_creation = df2['items'][0]['added_at']
+    playlist_creation = df['items'][0]['added_at']
     playlist_creation = playlist_creation[0:10]
 
-    playlist_size = df2['total']
+    playlist_size = df['total']
 
-    mode = df['Artist'].value_counts().idxmax()
-    item_counts = df['Artist'].value_counts()
+    tracks = df['items']
+    playlist_tracks_artist = []
+    for track in tracks:
+        if(track['track']['id']!=None):
+            playlist_tracks_artist.append(track['track']['artists'][0]['name'])
+    count_df = pd.DataFrame({'Number': playlist_tracks_artist})
+
+    mode = count_df.value_counts().idxmax()
+    item_counts = count_df.value_counts()
     max_item = item_counts.max()
     if(max_item == 1):
         max_item = 'once'
     else:
         max_item = f"{max_item} times"
 
-    quickInfo = pd.DataFrame()
-    quickInfo['img'] = [cover_url]
-    quickInfo['name'] = [playlist_name]
-    quickInfo['size'] = [playlist_size]
-    quickInfo['created'] = [playlist_creation]
-    quickInfo['frequent'] = [mode]
-    quickInfo['frequent_count'] = [str(max_item)]
-    print(sp.current_playback)
-    return quickInfo
+    playlist = {
+        "name": playlist_name,
+        "size": playlist_size,
+        "created": playlist_creation,
+        "frequent": mode[0],
+        "frequent_count": str(max_item),
+        "img": cover_url
+    }
+    return playlist
