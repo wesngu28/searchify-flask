@@ -76,7 +76,7 @@ def callback():
       session['token'] = access_token
       return redirect(url_for("index"))
     except:
-      return render_template("index.html")
+      return redirect(url_for("home"))
 
 @app.route("/search", methods=["POST"])
 @app.route("/home")
