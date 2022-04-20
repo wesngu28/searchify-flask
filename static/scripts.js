@@ -3,6 +3,7 @@ window.addEventListener('load', init);
 function init() {
   findLinks();
   findDownloadButton();
+  findAuthButton();
 }
 
 function findLinks() {
@@ -20,9 +21,20 @@ function findLinks() {
 
 function findDownloadButton() {
   const downloadButton = document.querySelector('#dl');
-  downloadButton.addEventListener('click', function(e) {
+  if (downloadButton !== null) {
+      downloadButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      fetch('/download-csv');
+      return false;
+    })
+  }
+}
+
+function findAuthButton() {
+  const authenticateButton = document.querySelector('#auth');
+  authenticateButton.addEventListener('click', function(e) {
     e.preventDefault();
-    fetch('/download-csv');
+    window.location.href="http://127.0.0.1:5000/user"
     return false;
   })
 }
