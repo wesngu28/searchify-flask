@@ -17,15 +17,7 @@ def artist_info(sp, url):
 
     name = df['name']
     images = df['images'][0]['url']
-    artist = {
-        "name" : name,
-        "genres" : genres,
-        "genre_list" : genre_string,
-        "img" : images
-    }
-    return artist
 
-def artist_recommendations(sp, url):
     url = [url]
     df = sp.recommendations(seed_artists=url, limit=2)
     df = df['tracks']
@@ -45,4 +37,12 @@ def artist_recommendations(sp, url):
         else:
             recommended_artists.append(track['artists'][0]['name'])
     list = dict(zip(recommended_track, recommended_artists))
-    return list
+
+    artist = {
+        "name" : name,
+        "genres" : genres,
+        "genre_list" : genre_string,
+        "img" : images,
+        "tracks" : list
+    }
+    return artist
