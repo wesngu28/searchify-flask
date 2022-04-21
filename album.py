@@ -17,7 +17,6 @@ def album_info(sp, url):
   playlist_tracks_artist = []
   assumed_main_artist = ''
   for artist in artist_list:
-      print(artist['artists'])
       if (len(artist['artists']) > 1):
           artist_counter = 0
           artist_list = ''

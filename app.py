@@ -70,9 +70,7 @@ def callback():
       }
       post_request = requests.post(SPOTIFY_TOKEN_URL, data=code_payload)
       response_data = json.loads(post_request.text)
-      print(response_data)
       access_token = response_data["access_token"]
-      #authorization_header = {"Authorization": "Bearer {}".format(access_token)}
       session['token'] = access_token
       return redirect(url_for("index"))
     except:
@@ -90,23 +88,22 @@ def index():
     try:
       link = request.form["inp"]
       if 'playlist' in link:
-        name = general_info_flow(playlist_info, sp, link, 'playlist')
+        name = general_info_flow(playlist_info, sp, link, 'info')
         return redirect(url_for("playlist", play=name))
 
       if 'artist' in link:
-        name = general_info_flow(artist_info, sp, link, 'artist')
+        name = general_info_flow(artist_info, sp, link, 'info')
         return redirect(url_for("artist", artist=name))
 
       if 'track' in link:
-        name = general_info_flow(track_info, sp, link, 'track')
+        name = general_info_flow(track_info, sp, link, 'info')
         return redirect(url_for("track", track=name))
 
       if 'album' in link:
-        name = general_info_flow(album_info, sp, link, 'album')
+        name = general_info_flow(album_info, sp, link, 'info')
         return redirect(url_for("album", album=name))
-
     except:
-      return "Issue encountered"
+      return 'Error encountered'
   else:
     return render_template("home.html")
 
@@ -120,69 +117,62 @@ def general_info_flow(functionName, sp, link, sessiontype):
 
 @app.route("/artist/<artist>")
 def artist(artist):
-  if session['links']:
-    artist_dict = session['artist']
-    link_dict = session['links']
-    link_df = pd.DataFrame(link_dict)
-    genres = artist_dict['genres']
+    dictionaries = commonRoute()
+    genres = dictionaries[1]['genres']
     main_genre = genres[0]
-    description = f"The {randomize_adjective()} {artist} is a {main_genre} artist. They make {randomize_adjective()} music of {artist_dict['genre_list']} genres."
+    description = f"The {randomize_adjective()} {dictionaries[1]['name']} is a {main_genre} artist. They make {randomize_adjective()} music of {dictionaries[1]['genre_list']} genres."
     table_use = "If you like this artist, here are some songs you may like!"
-    return render_template("spotify.html", table_use = table_use, description = description, info = artist_dict, column_names=link_df.columns.values, row_data=list(link_df.values.tolist()),
-                           link_column="coffee", zip=zip)
+    return render_template("spotify.html", table_use = table_use, play = dictionaries[1]['name'], description = description, info = dictionaries[1], column_names=dictionaries[0].columns.values, row_data=list(dictionaries[0].values.tolist()), zip=zip)
 
 @app.route("/album/<album>")
 def album(album):
-  if session['links']:
-    album_dict = session['album']
-    link_dict = session['links']
-    link_df = pd.DataFrame(link_dict)
-    description = f"The {randomize_adjective()} {album} is an album by {album_dict['main_artist']}. Released on {album_dict['release_date']}, it has {randomize_adjective()} {album_dict['total_tracks']} total songs."
+    dictionaries = commonRoute()
+    description = f"The {randomize_adjective()} {dictionaries[1]['name']} is an album by {dictionaries[1]['main_artist']}. Released on {dictionaries[1]['release_date']}, it has {randomize_adjective()} {dictionaries[1]['total_tracks']} total songs."
     table_use = "If you like this artist, here are some songs you may like!"
-    return render_template("spotify.html", table_use = table_use, description = description, info = album_dict, column_names=link_df.columns.values, row_data=list(link_df.values.tolist()),
-                           link_column="coffee", zip=zip)
+    return render_template("spotify.html", table_use = table_use, play = dictionaries[1]['name'], description = description, info = dictionaries[1], column_names=dictionaries[0].columns.values, row_data=list(dictionaries[0].values.tolist()), zip=zip)
 
 @app.route("/user/")
 def user():
     sp = spotipy.Spotify(auth=session["token"])
+    if spotipy.SpotifyOauthError:
+      return redirect(url_for("index"))
     df = user_info(sp)
-    print(df)
     return render_template("spotify.html")
 
 @app.route("/track/<track>")
 def track(track):
-  if session['links']:
-    track_dict = session['track']
-    link_dict = session['links']
-    link_df = pd.DataFrame(link_dict)
-    description = f"The {randomize_adjective()} song {track} was made by the {randomize_adjective()} {track_dict['artist']}. It was released on {track_dict['release']} in the {randomize_adjective()} album {track_dict['album']}."
-    print(description)
+    dictionaries = commonRoute()
+    description = f"The {randomize_adjective()} song {dictionaries[1]['name']} was made by the {randomize_adjective()} {dictionaries[1]['artist']}. It was released on {dictionaries[1]['release']} in the {randomize_adjective()} album {dictionaries[1]['album']}."
     table_use = "If you like this song, here are some other songs you may like!"
-    return render_template("spotify.html", table_use = table_use, description = description, info = track_dict, column_names=link_df.columns.values, row_data=list(link_df.values.tolist()),
-                           link_column="coffee", zip=zip)
+    return render_template("spotify.html", table_use = table_use, play = dictionaries[1]['name'], description = description, info = dictionaries[1], column_names=dictionaries[0].columns.values, row_data=list(dictionaries[0].values.tolist()), zip=zip)
 
 @app.route("/playlist/<play>")
 def playlist(play):
-  if session['links']:
-    link_dict = session['links']
-    link_df = pd.DataFrame(link_dict)
-    playlist_dict = session['playlist']
-    if play != playlist_dict['name']:
-      return render_template("index.html")
-    description = f"{play} was created on {playlist_dict['created']}. This {randomize_adjective()} playlist has size {playlist_dict['size']} with the {randomize_adjective()} {playlist_dict['frequent']} being the most frequent, appearing {playlist_dict['frequent_count']}."
+    dictionaries = commonRoute()
+    print(dictionaries)
+    description = f"{dictionaries[1]['name']} was created on {dictionaries[1]['created']}. This {randomize_adjective()} playlist has size {dictionaries[1]['size']} with the {randomize_adjective()} {dictionaries[1]['frequent']} being the most frequent, appearing {dictionaries[1]['frequent_count']}."
     table_use = "Youtube Links to the songs in this playlist"
-    return render_template("spotify.html", table_use = table_use, play = play, description = description, info = playlist_dict, column_names=link_df.columns.values, row_data=list(link_df.values.tolist()),
-                           link_column="Playlist Name", zip=zip)
+    return render_template("spotify.html", table_use = table_use, play = dictionaries[1]['name'], description = description, info = dictionaries[1], column_names=dictionaries[0].columns.values, row_data=list(dictionaries[0].values.tolist()), zip=zip)
+
+def commonRoute():
+    if session['links']:
+      link_dict = session['links']
+      link_df = pd.DataFrame(link_dict)
+      info_dict = session['info']
+      return link_df, info_dict
 
 @app.route('/download-csv')
 def downloadCSV():
-  link_dict = session['links']
-  link_df = pd.DataFrame(link_dict)
-  print(link_df)
-  song_dict = session['songs']
-  output_csv = song_dict['name'] + ".csv"
-  link_df.to_csv('playlists/' + output_csv, index=False)
-  return f"File saved to: {str(fileLocation)} with name {output_csv}"
+    link_dict = session['links']
+    link_df = pd.DataFrame(link_dict)
+    info_dict = session['info']
+    output_csv = info_dict['name'] + ".csv"
+    link_df.to_csv('downloads/' + output_csv, index=False)
+    return f"File saved to: {str(fileLocation)} with name {output_csv}"
+
+@app.errorhandler(401)
+def error_401(_):
+    return render_template("index.html")
 
 @app.errorhandler(404)
 def error_404(_):

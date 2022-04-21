@@ -11,14 +11,13 @@ def track_info(sp, url):
     artists = artists[:-2]
 
     url = [url]
-    rec_df = sp.recommendations(seed_tracks=url, limit=2)
+    rec_df = sp.recommendations(seed_tracks=url, limit=10)
     rec_df = rec_df['tracks']
     recommended_track = []
     recommended_artists = []
     for recommendation in rec_df:
         recommended_track.append(recommendation['name'])
         if(len(recommendation['artists']) > 1):
-            print(recommendation['artists'])
             artist_count = 0
             artist = ''
             while(artist_count < len(recommendation['artists'])):
