@@ -3,7 +3,6 @@ window.addEventListener('load', init);
 function init() {
   findLinks();
   findDownloadButton();
-  findUserButton();
   const swapButton = document.querySelector('#swap');
   swapButton.addEventListener('click', function(e){
     e.preventDefault();
@@ -30,18 +29,8 @@ function findDownloadButton() {
       downloadButton.addEventListener('click', function(e) {
       e.preventDefault();
       fetch('/download-csv');
-      return false;
     })
   }
-}
-
-function findUserButton() {
-  const userButton = document.querySelector('#user');
-  userButton.addEventListener('click', async function(e) {
-    e.preventDefault();
-    wf = await fetch('/user');
-    window.location.href= wf.url
-  })
 }
 
 function swapContent() {

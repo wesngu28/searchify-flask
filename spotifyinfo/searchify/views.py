@@ -100,19 +100,3 @@ def commonRoute():
       link_df = pd.DataFrame(link_dict)
       info_dict = session['info']
       return link_df, info_dict
-
-@searchify.errorhandler(401)
-def error_401(_):
-    return render_template("index.html")
-
-@searchify.errorhandler(404)
-def error_404(_):
-    return render_template("index.html")
-
-@searchify.errorhandler(405)
-def error_405(_):
-    return render_template("index.html")
-
-@searchify.errorhandler(500)
-def error_500(_):
-    return render_template("index.html")

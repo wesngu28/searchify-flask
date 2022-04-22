@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+Spotify Translator
+{% endblock %}
+
+{% block content %}
+<div id="error">
+  <p>You are not authenticated with Spotify. Please go and do that if you wish to proceed.</p>
+  <p><input class="btn btn-success btn-lg" type="submit" value="Login with Spotify" id="sub"/></p>
+</div>
+{% endblock %}

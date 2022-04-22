@@ -47,19 +47,3 @@ def downloadCSV():
     output_csv = info_dict['name'] + ".csv"
     link_df.to_csv('downloads/' + output_csv, index=False)
     return f"File saved to: {str(fileLocation)} with name {output_csv}"
-
-@auth.errorhandler(401)
-def error_401(_):
-    return render_template("index.html")
-
-@auth.errorhandler(404)
-def error_404(_):
-    return render_template("index.html")
-
-@auth.errorhandler(405)
-def error_405(_):
-    return render_template("index.html")
-
-@auth.errorhandler(500)
-def error_500(_):
-    return render_template("index.html")
