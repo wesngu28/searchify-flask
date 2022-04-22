@@ -1,14 +1,23 @@
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from spotifyinfo.searchify.utilities import readable_time
 import pandas as pd
 
 def track_info(sp, url):
     df = sp.track(url)
-    artists = ''
+    artists = []
     for information in df['artists']:
-      artists = artists + information['name'] + ', '
-    artists = artists[:-2]
+        artists.append(information['name'])
+    if (len(artists) > 1):
+        artists.insert(len(artists)-1, 'and')
+        artist_string = ''
+        for artist in artists:
+            artist_string = artist_string + artist + ', '
+        artist_string = artist_string[:-2]
+        artist_string = artist_string.replace('and,', 'and')
+    else:
+        artist_string = artists[0]
 
     url = [url]
     rec_df = sp.recommendations(seed_tracks=url, limit=10)
@@ -31,7 +40,7 @@ def track_info(sp, url):
 
     track = {
         "name" : df['name'],
-        "artist" : artists,
+        "artist" : artist_string,
         "duration" : readable_time(df['duration_ms']),
         "album" : df['album']['name'],
         "release" : df['album']['release_date'],
@@ -39,10 +48,3 @@ def track_info(sp, url):
         "tracks" : list
     }
     return track
-
-def readable_time(duration):
-    minutes = (duration / (60*1000)) % 60
-    minutes = int(minutes)
-    sec = (duration / 1000) % 60
-    sec = int(sec)
-    return f"{minutes} minutes and {sec} seconds"

@@ -23,3 +23,10 @@ def randomize_adjective():
     'impressive', 'genius', 'mensa-level', 'unique', 'notable', 'life-changing', 'alluring', 'bewitching', 'captivating', 'charming', 'attractive', 'enchanting', 'entertaining', 'banger', 'enthralling', 'fascinating', 'interesting', 'dope', 'fantabulous',
     'grand', 'heavenly', 'high-class', 'hype', 'stellar', 'superior', 'good', 'satisfactory', 'talented', 'legendary', 'worthy of celebrating', 'worthy of worship', 'godlike', 'god-tier', 's-tier', 'immersive', 'bop']
     return random.choice(adjectives)
+
+def readable_time(duration):
+    minutes = (duration / (60*1000)) % 60
+    minutes = int(minutes)
+    sec = (duration / 1000) % 60
+    sec = int(sec)
+    return f"{minutes} minutes and {sec} seconds"
