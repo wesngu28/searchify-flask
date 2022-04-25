@@ -3,11 +3,25 @@ window.addEventListener('load', init);
 function init() {
   findLinks();
   findDownloadButton();
-  const swapButton = document.querySelector('#swap');
-  swapButton.addEventListener('click', function(e){
-    e.preventDefault();
-    swapContent();
-  })
+  findSearchButton();
+  findSwapButton();
+}
+
+function findSearchButton() {
+  let searchButton = document.querySelector('#sub');
+  if (searchButton !== null) {
+    let input = document.querySelector('inp');
+    if ((input.includes('playlist')) || (input.includes('album') || (input.includes('track')) || (input.includes('artist')))) {
+      searchButton.addEventListener('click', message);
+    }
+  }
+}
+
+function message() {
+  let p = document.createElement('p');
+  p.textContent = 'Currently loading information...'
+  let newHome = document.querySelector('#link_container');
+  newHome.appendChild(p);
 }
 
 function findLinks() {
@@ -29,6 +43,17 @@ function findDownloadButton() {
       downloadButton.addEventListener('click', function(e) {
       e.preventDefault();
       fetch('/download-csv');
+    })
+  }
+}
+
+
+function findSwapButton() {
+  const swapButton = document.querySelector('#swap');
+  if (swapButton !== null) {
+    swapButton.addEventListener('click', function(e){
+      e.preventDefault();
+      swapContent();
     })
   }
 }
