@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, request, redirect, session, Response
+from flask import Blueprint, render_template, url_for, request, redirect, session
 from spotifyinfo.searchify.playlist import playlist_info
 from spotifyinfo.searchify.artist import artist_info
 from spotifyinfo.searchify.utilities import search_youtube, randomize_adjective
@@ -17,30 +17,30 @@ def index():
     if request.form["inp"]:
       link = request.form["inp"]
     else:
-      return render_template("home.html", error_msg = 'Provide a Playlist Link')
+      return render_template("home.html", error_msg = 'Provide a link')
     sp = spotipy.Spotify(auth=session["token"])
     try:
       link = request.form["inp"]
       if 'playlist' in link:
         name = general_info_flow(playlist_info, sp, link, 'info')
         return redirect(url_for("searchify.playlist", play=name))
-
-      if 'artist' in link:
+      elif 'artist' in link:
         name = general_info_flow(artist_info, sp, link, 'info')
         return redirect(url_for("searchify.artist", artist=name))
-
-      if 'track' in link:
+      elif 'track' in link:
         name = general_info_flow(track_info, sp, link, 'info')
         return redirect(url_for("searchify.track", track=name))
-
-      if 'album' in link:
+      elif 'album' in link:
         name = general_info_flow(album_info, sp, link, 'info')
         return redirect(url_for("searchify.album", album=name))
+      else:
+        return render_template("home.html")
     except:
-      return 'Error encountered'
+      return render_template("home.html")
   else:
     return render_template("home.html")
 
+#Common portions shared by all routes in one method
 def general_info_flow(functionName, sp, link, sessiontype):
     outcome_dict = functionName(sp, link)
     session[sessiontype] = outcome_dict

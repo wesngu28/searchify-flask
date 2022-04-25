@@ -1,15 +1,13 @@
-from flask import Blueprint, render_template, url_for, request, redirect, session
+from flask import Blueprint, url_for, request, redirect, session, render_template
 from spotifyinfo.config import SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL, REDIRECT_URI, CLIENT_ID, CLIENT_SECRET, AUTH_QUERY_PARAMETERS
-import pathlib
-fileLocation = pathlib.Path(__file__).parent.resolve()
-
+from pathlib import Path
 import requests
 import pandas as pd
 import json
-from spotipy import oauth2
-from spotipy.oauth2 import SpotifyOAuth
+
 auth = Blueprint('auth', __name__)
 
+#Authorization flow begins when the page is loaded, prompting user access in order to procure a token for access
 @auth.route("/", methods=["GET", "POST"])
 def home():
     print(AUTH_QUERY_PARAMETERS)
@@ -18,8 +16,7 @@ def home():
       params_list = params_list + i + '=' + j + '&'
     params_list = params_list[:-1]
     return redirect(f"{SPOTIFY_AUTH_URL}/?{params_list}")
-
-@auth.route("/callback/q")
+@auth.route("/callback/")
 def callback():
     session.clear()
     try:
@@ -39,11 +36,15 @@ def callback():
     except:
       return redirect(url_for("auth.home"))
 
+#Function that creates a download folder in the directory and downloads CSVs to it
+fileLocation = Path(__file__).parent
 @auth.route('/download-csv')
 def downloadCSV():
     link_dict = session['links']
     link_df = pd.DataFrame(link_dict)
     info_dict = session['info']
     output_csv = info_dict['name'] + ".csv"
+    dl = Path('downloads')
+    dl.mkdir(parents=True,exist_ok=True)
     link_df.to_csv('downloads/' + output_csv, index=False)
     return f"File saved to: {str(fileLocation)} with name {output_csv}"
