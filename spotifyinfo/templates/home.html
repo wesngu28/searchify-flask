@@ -5,13 +5,22 @@ Spotify Translator
 {% endblock %}
 
 {% block content %}
-<div>
-  <form action ="/search" method="POST">
-    <div id="link">
-      <p><input type="text" name="inp" id="inp" placeholder="Enter Spotify Link"/></p>
-      <p><input type="submit" name="submit" id="sub"/></p>
-    </div>
-    <p>{{ error_msg }}</p>
-  </form>
+<div id="about" class="mt-2 mb-4 text-center">
+  <h1 class="display-5 fw-bold">{{play}}</h1>
+  <div class="col-lg-6 mx-auto centered">
+      <h1>Searchify</h1>
+      <p>Search up your favorite songs, albums, and artists and get recommendations as well as various information about them.</p>
+      <p>Input your favorite playlist for information and a link to the song's corresponding YouTube links! Use your connected
+        account to view your top artists and tracks!</p>
+      <div id="link_container">
+        <form action ="/search" method="POST" id="searcher">
+          <div id="link">
+            <p><input type="text" name="inp" id="inp" placeholder="Enter Spotify Link"/></p>
+            <p><input type="submit" name="submit" id="sub"/></p>
+          </div>
+          <p>{{ error_msg }}</p>
+        </form>
+      </div>
+  </div>
 </div>
 {% endblock %}
