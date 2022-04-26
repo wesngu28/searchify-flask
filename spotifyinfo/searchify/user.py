@@ -54,7 +54,6 @@ def user_info(sp):
             short_term_track[idx] = f"{short_term_track[idx]} by {artist_string}"
         else:
             short_term_track[idx] = f"{short_term_track[idx]} by {(artist['artists'][0]['name'])}"
-    print(short_term_track)
 
     user_top_songs = sp.current_user_top_tracks(time_range = 'medium_term')
     for song in user_top_songs['items']:
@@ -70,7 +69,6 @@ def user_info(sp):
             medium_term_track[idx] = f"{medium_term_track[idx]} by {artist_string}"
         else:
             medium_term_track[idx] = f"{medium_term_track[idx]} by {(artist['artists'][0]['name'])}"
-    print(medium_term_track)
 
     user_top_songs = sp.current_user_top_tracks(time_range = 'long_term')
     for song in user_top_songs['items']:
@@ -86,7 +84,6 @@ def user_info(sp):
             long_term_track[idx] = f"{long_term_track[idx]} by {artist_string}"
         else:
             long_term_track[idx] = f"{long_term_track[idx]} by {(artist['artists'][0]['name'])}"
-    print(long_term_track)
 
     top_songs = pd.DataFrame({'Last 4 Weeks': short_term_track, 'Last Six Months': medium_term_track, 'All Time': long_term_track})
     user = {

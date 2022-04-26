@@ -10,7 +10,6 @@ auth = Blueprint('auth', __name__)
 #Authorization flow begins when the page is loaded, prompting user access in order to procure a token for access
 @auth.route("/", methods=["GET", "POST"])
 def home():
-    print(AUTH_QUERY_PARAMETERS)
     params_list = ''
     for i, j in AUTH_QUERY_PARAMETERS.items():
       params_list = params_list + i + '=' + j + '&'

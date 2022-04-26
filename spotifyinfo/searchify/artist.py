@@ -6,6 +6,7 @@ import pandas as pd
 def artist_info(sp, url):
     df = sp.artist(url)
     genres = df['genres']
+    genre_string = 'varying'
     if (len(genres) > 1):
         genres.insert(len(genres)-1, 'and')
         genre_string = ''

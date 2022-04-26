@@ -1,5 +1,14 @@
-{% include "home.html" %}
-
+{% extends "base.html" %}
+{% block content %}
+<div id="link_container">
+  <form action ="/search" method="POST" id="searcher">
+    <div id="link">
+      <p><input type="text" name="inp" id="inp" placeholder="Enter Spotify Link"/></p>
+      <p><input type="submit" name="submit" id="sub"/></p>
+    </div>
+    <p>{{ error_msg }}</p>
+  </form>
+</div>
 <div id="pl-home" class="mt-2 mb-4 text-center">
   <img class="d-block mx-auto mb-4" src={{info['img']}} alt="" width="300vh" height="300vh">
   <h1 class="display-5 fw-bold">{{play}}</h1>
@@ -28,4 +37,4 @@
   {% endfor %}
   </table>
 </div>
-{% block body %}{% endblock %}
+{% endblock %}
