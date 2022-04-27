@@ -1,7 +1,7 @@
 # Searchify
 A personal project that I made to convert a script which grabbed basic information from a spotify playlist into a more expansive website which incorporated support for albums, individual tracks, playlists, artists, and the current user through the authorization flow. This was made with the Flask framework, as well as HTML, bootstrap CSS with PurgeCSS to reduce the size, and vanilla javascript.
 
-After uploading as an all-in one Flask front-end and Flask back-end, I will transition to turning the flask portion into a restful API, and learn a framework and use the API to serve a new independent front end. Another potential goal regarding this could be integrating a database which I had in earlier commits but did not see the point for this particular project, as well as potentially using a CSS framework/preprocessor like Sass or tailwind.
+As this is an all-in-one Flask app in which it acts as both front and back end, I want my next personal project to incorporate a separate front and back end.
 
 ## How to Use
 You will need Python 3.
