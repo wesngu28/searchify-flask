@@ -1,18 +1,35 @@
 window.addEventListener('load', init);
 
 function init() {
+  let searchButton = document.querySelector('#sub');
+  searchButton.disabled = true
   findLinks();
   findDownloadButton();
-  findSearchButton();
+  let input = document.querySelector('#inp');
+  input.addEventListener('input', validation);
+  input.addEventListener('input', findSearchButton);
   findSwapButton();
 }
 
+function validation() {
+  let input = document.querySelector('#inp');
+  let searchButton = document.querySelector('#sub');
+  spotifyUrl = new RegExp('^(https:\/\/open.spotify.com\/)([a-zA-Z0-9]+)(.*)$');
+  spotifyUrlChars = new RegExp('^[A-Za-z0-9?.=:\/_]*$')
+  if (!spotifyUrl.test(input.value) || !spotifyUrlChars.test(input.value)) {
+    searchButton.disabled = true
+  } else {
+    searchButton.disabled = false
+  }
+}
 function findSearchButton() {
   let searchButton = document.querySelector('#sub');
   if (searchButton !== null) {
-    let input = document.querySelector('inp');
-    if ((input.includes('playlist')) || (input.includes('album') || (input.includes('track')) || (input.includes('artist')))) {
-      searchButton.addEventListener('click', message);
+    let input = document.querySelector('#inp');
+    if (input.value !== null) {
+      if ((input.value.includes('playlist')) || (input.value.includes('album') || (input.value.includes('track')) || (input.value.includes('artist')))) {
+        searchButton.addEventListener('click', message);
+      }
     }
   }
 }
