@@ -34,7 +34,7 @@ def index():
         name = general_info_flow(album_info, sp, link, 'info')
         return redirect(url_for("searchify.album", album=name))
       else:
-        return render_template("home.html")
+        return render_template("home.html", error_msg = 'Invalid Link')
     except:
       return render_template("home.html")
   else:
